@@ -26,7 +26,7 @@ const ImagesMK = [
 ];
 
 const getRandomFromArray = function(arr) {
-    return arr[Math.abs(Math.floor(arr.length-Math.random()*10))];
+    return arr[Math.abs(Math.floor(arr.length-Math.random()*arr.length))];
 };
 
 const player1 = {
