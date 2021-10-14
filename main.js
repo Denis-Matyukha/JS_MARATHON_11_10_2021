@@ -1,7 +1,8 @@
 
 // на момент выполнения дз  
-// картинки из notion не всегда загружались, 
-// поэтому массив с картинками был заменён ↓
+// gif картинки из Notion не всегда загружались, 
+// (возможно, проблема на моей стороне, но решить её не получилось)
+// поэтому массив с картинками был временно заменён ↓
 
 // const ImagesMK = [
 //     'http://reactmarathon-api.herokuapp.com/assets/scorpion.gif',
@@ -31,7 +32,7 @@ const getRandomFromArray = function(arr) {
 const player1 = {
     name: 'Scorpion',
     hp: 100,
-    img: '',
+    img: 'http://reactmarathon-api.herokuapp.com/assets/scorpion.gif',
     weapon: ['keyboard'],
     attack: function () {
         console.log(`${this.name} Fight...`);
@@ -41,28 +42,28 @@ const player1 = {
 const player2 = {
     name: 'Subzero',
     hp: 95,
-    img: '',
+    img: 'http://reactmarathon-api.herokuapp.com/assets/subzero.gif',
     weapon: ['keyboard'],
     attack: function () {
         console.log(`${this.name} Fight...`);
     }
 };
 
+const createPlayer = function (charClass = 'player1', player) {
 
-const createPlayer = function (charClass = 'player1', charName = 'NoName', charHp = '50') {
     let $player = document.createElement('div');
     $player.classList.add(charClass);
 
     let $progressBar = document.createElement('div');
     let $life = document.createElement('div');
     let $nameEl = document.createElement('div');
-    $nameEl.textContent = charName;
+
     $nameEl.classList.add('name');
     $progressBar.classList.add('progressbar');
     $life.classList.add('life');
 
-    $life.style.width = `${charHp}px`;
-    $nameEl.innerText = `${charName}`;
+    $life.style.width = `${player.hp}%`;
+    $nameEl.innerText = player.name;
 
     $progressBar.append($life, $nameEl);
     
@@ -79,6 +80,5 @@ const createPlayer = function (charClass = 'player1', charName = 'NoName', charH
     document.body.querySelector('.arenas').appendChild($player);
 };
 
-
-createPlayer('player1', 'SCORPION', 50);
-createPlayer('player2', 'SUBZERO', 80);
+createPlayer('player1', player1);
+createPlayer('player2', player2);
