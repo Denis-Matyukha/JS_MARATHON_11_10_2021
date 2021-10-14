@@ -1,25 +1,8 @@
-const player1 = {
-    name: 'Scorpion',
-    hp: 100,
-    img: '',
-    weapon: ['keyboard'],
-    attack: function () {
-        console.log(`${this.name} Fight...`);
-    }
-};
 
-const player2 = {
-    name: 'Subzero',
-    hp: 95,
-    img: '',
-    weapon: ['keyboard'],
-    attack: function () {
-        console.log(`${this.name} Fight...`);
-    }
-};
+// на момент выполнения дз  
+// картинки из notion не всегда загружались, 
+// поэтому массив с картинками был заменён ↓
 
-
-// на момент выполнения дз картинки не загружались, поэтому массив с картинками был заменён ↓
 // const ImagesMK = [
 //     'http://reactmarathon-api.herokuapp.com/assets/scorpion.gif',
 //     'http://reactmarathon-api.herokuapp.com/assets/kitana.gif',
@@ -41,6 +24,31 @@ const ImagesMK = [
     'https://i.gifer.com/origin/51/51400a9b5b73916bc996914bcc6e4c4e_w200.webp'
 ];
 
+const getRandomFromArray = function(arr) {
+    return arr[Math.abs(Math.floor(arr.length-Math.random()*10))];
+};
+
+const player1 = {
+    name: 'Scorpion',
+    hp: 100,
+    img: '',
+    weapon: ['keyboard'],
+    attack: function () {
+        console.log(`${this.name} Fight...`);
+    }
+};
+
+const player2 = {
+    name: 'Subzero',
+    hp: 95,
+    img: '',
+    weapon: ['keyboard'],
+    attack: function () {
+        console.log(`${this.name} Fight...`);
+    }
+};
+
+
 const createPlayer = function (charClass = 'player1', charName = 'NoName', charHp = '50') {
     let $player = document.createElement('div');
     $player.classList.add(charClass);
@@ -53,9 +61,7 @@ const createPlayer = function (charClass = 'player1', charName = 'NoName', charH
     $progressBar.classList.add('progressbar');
     $life.classList.add('life');
 
-    // $life.style.width = `100px`;
     $life.style.width = `${charHp}px`;
-
     $nameEl.innerText = `${charName}`;
 
     $progressBar.append($life, $nameEl);
@@ -63,38 +69,16 @@ const createPlayer = function (charClass = 'player1', charName = 'NoName', charH
     let $character = document.createElement('div');
     let $img = document.createElement('img');
 
-    // $img.src = 'https://i.gifer.com/Y60L.gif';
-    // $img.src = 'http://reactmarathon-api.herokuapp.com/assets/scorpion.gif';
-    // $img.src = Math.abs(Math.floor(5-Math.random()*10));
-    // $img.src = ImagesMK[Math.abs(Math.floor(ImagesMK.length-Math.random()*10))];
-    let x = ImagesMK[Math.abs(Math.floor(ImagesMK.length-Math.random()*10))];
-    console.log(x);
-    console.log(typeof x);
-    $img.src = x;
+    $img.src = getRandomFromArray(ImagesMK);
     
     $character.classList.add('character');
     $character.appendChild($img);
     
     $player.append($progressBar, $character);
 
-    // document.body.querySelector('.arenas').insertAdjacent('afterbegin',$player);
-    // console.log(`fn createPlayer() with args → ${this.args}`);
-    // console.log(`fn createPlayer() with args ↓`);
-    // console.log([...arguments]);
-    // console.log($player);
-    // return $player
     document.body.querySelector('.arenas').appendChild($player);
 };
 
 
 createPlayer('player1', 'SCORPION', 50);
 createPlayer('player2', 'SUBZERO', 80);
-
-/*
-- http://reactmarathon-api.herokuapp.com/assets/scorpion.gif
-- http://reactmarathon-api.herokuapp.com/assets/kitana.gif
-- http://reactmarathon-api.herokuapp.com/assets/liukang.gif
-- http://reactmarathon-api.herokuapp.com/assets/sonya.gif
-- http://reactmarathon-api.herokuapp.com/assets/subzero.gif
-- https://i.gifer.com/Y60L.gif
-*/
