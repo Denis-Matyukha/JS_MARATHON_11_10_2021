@@ -25,6 +25,8 @@ const ImagesMK = [
     'https://i.gifer.com/origin/51/51400a9b5b73916bc996914bcc6e4c4e_w200.webp'
 ];
 
+const $arenas = document.body.querySelector('.arenas'); 
+
 const getRandomFromArray = function(arr) {
     return arr[Math.abs(Math.floor(arr.length-Math.random()*arr.length))];
 };
@@ -77,7 +79,7 @@ const createPlayer = function (charClass = 'player1', player) {
     
     $player.append($progressBar, $character);
 
-    document.body.querySelector('.arenas').appendChild($player);
+    $arenas.appendChild($player);
 };
 
 createPlayer('player1', player1);
