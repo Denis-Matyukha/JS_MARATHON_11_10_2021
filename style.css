@@ -274,3 +274,15 @@ body {
     font-family: "Mortal Kombat 3";
 }
 
+.winTitle {
+    position: absolute;
+    top: 25%;
+    left: 50%;
+    font-size: 36px;
+    transform: translate(-50%, 0%);
+    text-transform: uppercase;
+    z-index: 1000;
+    color: rgb(245 209 0);
+    font-family: "Mortal Kombat 3";
+}
+

@@ -1,9 +1,4 @@
-
-// на момент выполнения дз  
-// gif картинки из Notion не всегда загружались, 
-// (возможно, проблема на моей стороне, но решить её не получилось)
-// поэтому массив с картинками был временно заменён ↓
-
+// default canonical GIFs:
 // const ImagesMK = [
 //     'http://reactmarathon-api.herokuapp.com/assets/scorpion.gif',
 //     'http://reactmarathon-api.herokuapp.com/assets/kitana.gif',
@@ -87,28 +82,21 @@ const createPlayer = function (playerObj) {
     return $player;
 };
 
-
-const playerLose = function (name) {
-    const $loseTitle = createElem('div', 'loseTitle');
-    $loseTitle.innerText = `${name} lose`;
-    console.log(`playerLose_Fn`);
-    console.log($loseTitle);
-    return $loseTitle;
+const playerWin = function (name) {
+    const $winTitle = createElem('div', 'winTitle');
+    $winTitle.innerText = `${name} wins`;
+    return $winTitle;
 };
 
 const changeHp = function (player) {
-    // const $playerLife = document.querySelector('.player2 .life');
-    const $playerLife = document.querySelector('.player' + player.player + ' .life');
-    // const $playerLife = document.querySelector()
-    // player.hp -=20;
+    const $playerLife = document.querySelector(`.player${player.player} .life`);
+    const palyersPartner = player.player === 1 ? player2 : player1;
     player.hp -= Math.ceil(Math.random() * 20);
-    // $playerLife.style.width = player.hp + '%';
     $playerLife.style.width = player.hp + '%';
     
     if (player.hp <= 0) {
-        player.hp = 0;
         $playerLife.style.width = 0 + '%';
-        $arenas.appendChild(playerLose(player.name));
+        $arenas.appendChild(playerWin(palyersPartner.name));
         $randomBtn.disabled = true;
     }
 };
