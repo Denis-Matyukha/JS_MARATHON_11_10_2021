@@ -25,10 +25,11 @@ const ImagesMK = [
     'https://i.gifer.com/origin/51/51400a9b5b73916bc996914bcc6e4c4e_w200.webp'
 ];
 
-const $arenas = document.body.querySelector('.arenas'); 
+const $arenas = document.body.querySelector('.arenas');
+const $randomBtn = document.body.querySelector('.button');
 
-const getRandomFromArray = function(arr) {
-    return arr[Math.abs(Math.floor(arr.length-Math.random()*arr.length))];
+const getRandomFromArray = function (arr) {
+    return arr[Math.abs(Math.floor(arr.length - Math.random() * arr.length))];
 };
 
 const player1 = {
@@ -45,7 +46,7 @@ const player1 = {
 const player2 = {
     player: 2,
     name: 'Subzero',
-    hp: 95,
+    hp: 100,
     img: 'http://reactmarathon-api.herokuapp.com/assets/subzero.gif',
     weapon: ['keyboard'],
     attack: function () {
@@ -53,7 +54,7 @@ const player2 = {
     }
 };
 
-const createElem = function(tag, className) {
+const createElem = function (tag, className) {
     const $tag = document.createElement(tag);
     if (className) {
         $tag.classList.add(className);
@@ -72,7 +73,7 @@ const createPlayer = function (playerObj) {
     $nameEl.innerText = playerObj.name;
 
     $progressBar.append($life, $nameEl);
-    
+
     let $character = document.createElement('div');
     $character.classList.add('character');
 
@@ -85,6 +86,37 @@ const createPlayer = function (playerObj) {
 
     return $player;
 };
+
+
+const playerLose = function (name) {
+    const $loseTitle = createElem('div', 'loseTitle');
+    $loseTitle.innerText = `${name} lose`;
+    console.log(`playerLose_Fn`);
+    console.log($loseTitle);
+    return $loseTitle;
+};
+
+const changeHp = function (player) {
+    // const $playerLife = document.querySelector('.player2 .life');
+    const $playerLife = document.querySelector('.player' + player.player + ' .life');
+    // const $playerLife = document.querySelector()
+    // player.hp -=20;
+    player.hp -= Math.ceil(Math.random() * 20);
+    // $playerLife.style.width = player.hp + '%';
+    $playerLife.style.width = player.hp + '%';
+    
+    if (player.hp <= 0) {
+        player.hp = 0;
+        $playerLife.style.width = 0 + '%';
+        $arenas.appendChild(playerLose(player.name));
+        $randomBtn.disabled = true;
+    }
+};
+
+$randomBtn.addEventListener('click', function () {
+    changeHp(player1);
+    changeHp(player2);
+});
 
 $arenas.appendChild(createPlayer(player1));
 $arenas.appendChild(createPlayer(player2));
