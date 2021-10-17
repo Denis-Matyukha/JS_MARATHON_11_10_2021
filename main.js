@@ -32,6 +32,7 @@ const getRandomFromArray = function(arr) {
 };
 
 const player1 = {
+    player: 1,
     name: 'Scorpion',
     hp: 100,
     img: 'http://reactmarathon-api.herokuapp.com/assets/scorpion.gif',
@@ -42,6 +43,7 @@ const player1 = {
 };
 
 const player2 = {
+    player: 2,
     name: 'Subzero',
     hp: 95,
     img: 'http://reactmarathon-api.herokuapp.com/assets/subzero.gif',
@@ -51,36 +53,38 @@ const player2 = {
     }
 };
 
-const createPlayer = function (charClass = 'player1', player) {
+const createElem = function(tag, className) {
+    const $tag = document.createElement(tag);
+    if (className) {
+        $tag.classList.add(className);
+    }
+    return $tag;
+};
 
-    let $player = document.createElement('div');
-    $player.classList.add(charClass);
+const createPlayer = function (playerObj) {
 
-    let $progressBar = document.createElement('div');
-    let $life = document.createElement('div');
-    let $nameEl = document.createElement('div');
+    let $player = createElem('div', `player${playerObj.player}`);
+    let $progressBar = createElem('div', 'progressbar');
+    let $life = createElem('div', 'life');
+    let $nameEl = createElem('div', 'name');
 
-    $nameEl.classList.add('name');
-    $progressBar.classList.add('progressbar');
-    $life.classList.add('life');
-
-    $life.style.width = `${player.hp}%`;
-    $nameEl.innerText = player.name;
+    $life.style.width = `${playerObj.hp}%`;
+    $nameEl.innerText = playerObj.name;
 
     $progressBar.append($life, $nameEl);
     
     let $character = document.createElement('div');
+    $character.classList.add('character');
+
     let $img = document.createElement('img');
 
     $img.src = getRandomFromArray(ImagesMK);
-    
-    $character.classList.add('character');
     $character.appendChild($img);
-    
+
     $player.append($progressBar, $character);
 
-    $arenas.appendChild($player);
+    return $player;
 };
 
-createPlayer('player1', player1);
-createPlayer('player2', player2);
+$arenas.appendChild(createPlayer(player1));
+$arenas.appendChild(createPlayer(player2));
