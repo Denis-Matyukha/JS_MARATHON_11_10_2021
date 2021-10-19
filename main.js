@@ -82,23 +82,57 @@ const createPlayer = function (playerObj) {
     return $player;
 };
 
-const playerWin = function (name) {
+const getNumRandom = function (min, max) {
+    return Math.round(min + Math.random() * (max - min))
+};
+
+const showTitle = function (title) {
     const $winTitle = createElem('div', 'winTitle');
-    $winTitle.innerText = `${name} wins`;
+    $winTitle.innerText = title;
     return $winTitle;
+};
+
+const checkResult = function (player, opponent) {
+
+    const $playerLife = document.querySelector(`.player${player.player} .life`);
+    const $opponentLife = document.querySelector(`.player${player.player} .life`);
+
+    const existedTitle = $arenas.querySelector('.winTitle');
+    if (existedTitle) existedTitle.remove();
+
+
+    if (player.hp <= 0 && opponent.hp <= 0) {
+        $arenas.appendChild(showTitle(`draw`));
+        $randomBtn.disabled = true;
+        $playerLife.style.width = 0 + '%';
+        $opponentLife.style.width = 0 + '%';
+
+        console.log(player.hp, `  player.hp     `, opponent.hp, `  opponent.hp`);
+
+    } else if (player.hp <= 0) {
+        $playerLife.style.width = 0 + '%';
+        $arenas.appendChild(showTitle(`${opponent.name} wins`));
+        $randomBtn.disabled = true;
+
+        console.log(player.hp, `  player.hp     `, opponent.hp, `  opponent.hp`);
+    } else if (opponent.hp <= 0) {
+        $opponentLife.style.width = 0 + '%';
+        $arenas.appendChild(showTitle(`${player.name} wins`));
+        $randomBtn.disabled = true;
+
+        console.log(player.hp, `  player.hp     `, opponent.hp, `  opponent.hp`);
+    }
+
 };
 
 const changeHp = function (player) {
     const $playerLife = document.querySelector(`.player${player.player} .life`);
-    const palyersPartner = player.player === 1 ? player2 : player1;
-    player.hp -= Math.ceil(Math.random() * 20);
+    const opponent = player.player === 1 ? player2 : player1;
+
+    player.hp -= getNumRandom(0, 20);
     $playerLife.style.width = player.hp + '%';
-    
-    if (player.hp <= 0) {
-        $playerLife.style.width = 0 + '%';
-        $arenas.appendChild(playerWin(palyersPartner.name));
-        $randomBtn.disabled = true;
-    }
+
+    checkResult(player, opponent);
 };
 
 $randomBtn.addEventListener('click', function () {
