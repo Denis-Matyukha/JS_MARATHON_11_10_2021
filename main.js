@@ -1,9 +1,4 @@
-
-// на момент выполнения дз  
-// gif картинки из Notion не всегда загружались, 
-// (возможно, проблема на моей стороне, но решить её не получилось)
-// поэтому массив с картинками был временно заменён ↓
-
+// default canonical GIFs:
 // const ImagesMK = [
 //     'http://reactmarathon-api.herokuapp.com/assets/scorpion.gif',
 //     'http://reactmarathon-api.herokuapp.com/assets/kitana.gif',
@@ -25,11 +20,15 @@ const ImagesMK = [
     'https://i.gifer.com/origin/51/51400a9b5b73916bc996914bcc6e4c4e_w200.webp'
 ];
 
-const getRandomFromArray = function(arr) {
-    return arr[Math.abs(Math.floor(arr.length-Math.random()*arr.length))];
+const $arenas = document.body.querySelector('.arenas');
+const $randomBtn = document.body.querySelector('.button');
+
+const getRandomFromArray = function (arr) {
+    return arr[Math.abs(Math.floor(arr.length - Math.random() * arr.length))];
 };
 
 const player1 = {
+    player: 1,
     name: 'Scorpion',
     hp: 100,
     img: 'http://reactmarathon-api.herokuapp.com/assets/scorpion.gif',
@@ -40,8 +39,9 @@ const player1 = {
 };
 
 const player2 = {
+    player: 2,
     name: 'Subzero',
-    hp: 95,
+    hp: 100,
     img: 'http://reactmarathon-api.herokuapp.com/assets/subzero.gif',
     weapon: ['keyboard'],
     attack: function () {
@@ -49,36 +49,96 @@ const player2 = {
     }
 };
 
-const createPlayer = function (charClass = 'player1', player) {
+const createElem = function (tag, className) {
+    const $tag = document.createElement(tag);
+    if (className) {
+        $tag.classList.add(className);
+    }
+    return $tag;
+};
 
-    let $player = document.createElement('div');
-    $player.classList.add(charClass);
+const createPlayer = function (playerObj) {
 
-    let $progressBar = document.createElement('div');
-    let $life = document.createElement('div');
-    let $nameEl = document.createElement('div');
+    let $player = createElem('div', `player${playerObj.player}`);
+    let $progressBar = createElem('div', 'progressbar');
+    let $life = createElem('div', 'life');
+    let $nameEl = createElem('div', 'name');
 
-    $nameEl.classList.add('name');
-    $progressBar.classList.add('progressbar');
-    $life.classList.add('life');
-
-    $life.style.width = `${player.hp}%`;
-    $nameEl.innerText = player.name;
+    $life.style.width = `${playerObj.hp}%`;
+    $nameEl.innerText = playerObj.name;
 
     $progressBar.append($life, $nameEl);
-    
+
     let $character = document.createElement('div');
+    $character.classList.add('character');
+
     let $img = document.createElement('img');
 
     $img.src = getRandomFromArray(ImagesMK);
-    
-    $character.classList.add('character');
     $character.appendChild($img);
-    
+
     $player.append($progressBar, $character);
 
-    document.body.querySelector('.arenas').appendChild($player);
+    return $player;
 };
 
-createPlayer('player1', player1);
-createPlayer('player2', player2);
+const getNumRandom = function (min, max) {
+    return Math.round(min + Math.random() * (max - min))
+};
+
+const showTitle = function (title) {
+    const $winTitle = createElem('div', 'winTitle');
+    $winTitle.innerText = title;
+    return $winTitle;
+};
+
+const checkResult = function (player, opponent) {
+
+    const $playerLife = document.querySelector(`.player${player.player} .life`);
+    const $opponentLife = document.querySelector(`.player${player.player} .life`);
+
+    const existedTitle = $arenas.querySelector('.winTitle');
+    if (existedTitle) existedTitle.remove();
+
+
+    if (player.hp <= 0 && opponent.hp <= 0) {
+        $arenas.appendChild(showTitle(`draw`));
+        $randomBtn.disabled = true;
+        $playerLife.style.width = 0 + '%';
+        $opponentLife.style.width = 0 + '%';
+
+        console.log(player.hp, `  player.hp     `, opponent.hp, `  opponent.hp`);
+
+    } else if (player.hp <= 0) {
+        $playerLife.style.width = 0 + '%';
+        $arenas.appendChild(showTitle(`${opponent.name} wins`));
+        $randomBtn.disabled = true;
+
+        console.log(player.hp, `  player.hp     `, opponent.hp, `  opponent.hp`);
+    } else if (opponent.hp <= 0) {
+        $opponentLife.style.width = 0 + '%';
+        $arenas.appendChild(showTitle(`${player.name} wins`));
+        $randomBtn.disabled = true;
+
+        console.log(player.hp, `  player.hp     `, opponent.hp, `  opponent.hp`);
+    }
+
+};
+
+const changeHp = function (player) {
+    const $playerLife = document.querySelector(`.player${player.player} .life`);
+    const opponent = player.player === 1 ? player2 : player1;
+
+    player.hp -= getNumRandom(0, 20);
+    $playerLife.style.width = player.hp + '%';
+
+    checkResult(player, opponent);
+};
+
+$randomBtn.addEventListener('click', function () {
+    changeHp(player1);
+    changeHp(player2);
+});
+
+$arenas.appendChild(createPlayer(player1));
+$arenas.appendChild(createPlayer(player2));
