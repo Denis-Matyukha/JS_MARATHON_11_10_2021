@@ -82,11 +82,11 @@ const checkResult = function (player, opponent) {
     }
 };
 
-const elHP = function () {
+const elHp = function () {
     return document.querySelector(`.player${this.player} .life`);
 };
 
-const renderHP = function (hp) {
+const renderHp = function (hp) {
     elHP.call(this).style.width = +hp + '%';
 };
 
@@ -99,18 +99,20 @@ const changeHp = function (hp) {
     }
 };
 
+const attack = function () {
+    console.log(`${this.name} Fight...`);
+};
+
 const player1 = {
     player: 1,
     name: 'Scorpion',
     hp: 100,
     img: 'http://reactmarathon-api.herokuapp.com/assets/scorpion.gif',
     weapon: ['keyboard'],
-    attack: function () {
-        console.log(`${this.name} Fight...`);
-    },
-    changeHP: changeHp,
-    elHP: elHP,
-    renderHP: renderHP,
+    changeHp,
+    renderHp,
+    attack,
+    elHp,
 };
 
 const player2 = {
@@ -119,12 +121,10 @@ const player2 = {
     hp: 100,
     img: 'http://reactmarathon-api.herokuapp.com/assets/subzero.gif',
     weapon: ['keyboard'],
-    attack: function () {
-        console.log(`${this.name} Fight...`);
-    },
-    changeHP: changeHp,
-    elHP: elHP,
-    renderHP: renderHP,
+    changeHp,
+    renderHp,
+    attack,
+    elHp,
 };
 
 const createPlayer = function (playerObj) {
