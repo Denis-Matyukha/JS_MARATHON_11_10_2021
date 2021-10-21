@@ -174,16 +174,6 @@ const enemyAttack = function () {
     }
 };
 
-// $fightBtn.addEventListener('click', function () {
-
-//     player1.changeHp(getNumRandom(0, 20));
-//     player1.renderHp(player1.hp);
-//     player2.changeHp(getNumRandom(0, 20));
-//     player2.renderHp(player2.hp);
-
-//     checkResult(player1, player2);
-// });
-
 $formFight.addEventListener('submit', function (e) {
     e.preventDefault();
 
@@ -201,38 +191,18 @@ $formFight.addEventListener('submit', function (e) {
         }
         item.checked = false;
     }
-    
-    console.log(`attack`, attack);
-    console.log(`enemy `, enemy);
-    console.log(``);
-
-
-    // $fightBtn.addEventListener('click', function () {
 
     if (attack.defence !== enemy.hit) {
-        // player1.changeHp(getNumRandom(20, 20));
         player1.changeHp(getNumRandom(0, enemy.value));
-        // player1.changeHp(getNumRandom(0, enemy.value));
         player1.renderHp(player1.hp);
     }
 
     if (enemy.defence !== attack.hit) {
-        // player2.changeHp(getNumRandom(0, 20));
         player2.changeHp(getNumRandom(0, attack.value));
-        // player2.changeHp(getNumRandom(0, attack.value));
         player2.renderHp(player2.hp);
     }
 
     checkResult(player1, player2);
-    // });
-
-    // $fightBtn.addEventListener('click', function () {
-    //     player1.changeHp(getNumRandom(0, 20));
-    //     player1.renderHp(player1.hp);
-    //     player2.changeHp(getNumRandom(0, 20));
-    //     player2.renderHp(player2.hp);
-    //     checkResult(player1, player2);
-    // });
 });
 
 $arenas.appendChild(createPlayer(player1));
