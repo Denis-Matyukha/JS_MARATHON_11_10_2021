@@ -16,8 +16,17 @@ const ImagesMK = [
     'https://i.gifer.com/Y60L.gif',
 ];
 
+const HIT = {
+    head: 30,
+    body: 25,
+    foot: 20,
+}
+
+const ATTACK = ['head', 'body', 'foot'];
+
 const $arenas = document.body.querySelector('.arenas');
-const $randomBtn = document.body.querySelector('.button');
+const $fightBtn = document.body.querySelector('.button');
+const $formFight = document.body.querySelector('.control');
 
 
 const getRandomFromArray = function (arr) {
@@ -58,27 +67,29 @@ const createReloadButton = function () {
 
 const checkResult = function (player, opponent) {
 
+    let stopFightOfferReload = function () {
+        $fightBtn.disabled = true;
+        createReloadButton();
+    };
+
     if (player.hp <= 0 && opponent.hp <= 0) {
 
         $arenas.appendChild(showTitle(`draw`));
-        $randomBtn.disabled = true;
-        createReloadButton();
-        player.renderHP(0);
-        opponent.renderHP(0);
+        stopFightOfferReload();
+        opponent.renderHp(0);
+        player.renderHp(0);
 
     } else if (player.hp <= 0) {
 
-        player.renderHP(0);
         $arenas.appendChild(showTitle(`${opponent.name} wins`));
-        $randomBtn.disabled = true;
-        createReloadButton();
+        stopFightOfferReload();
+        player.renderHp(0);
 
     } else if (opponent.hp <= 0) {
 
-        opponent.renderHP(0);
         $arenas.appendChild(showTitle(`${player.name} wins`));
-        $randomBtn.disabled = true;
-        createReloadButton();
+        stopFightOfferReload();
+        opponent.renderHp(0);
     }
 };
 
@@ -87,7 +98,7 @@ const elHp = function () {
 };
 
 const renderHp = function (hp) {
-    elHP.call(this).style.width = +hp + '%';
+    elHp.call(this).style.width = +hp + '%';
 };
 
 const changeHp = function (hp) {
@@ -152,16 +163,76 @@ const createPlayer = function (playerObj) {
     return $player;
 };
 
+const enemyAttack = function () {
+    const hit = ATTACK[getNumRandom(0, 2)];
+    const defence = ATTACK[getNumRandom(0, 2)];
 
-$randomBtn.addEventListener('click', function () {
+    return {
+        value: getNumRandom(0, HIT[hit]),
+        hit,
+        defence,
+    }
+};
 
-    player1.changeHP(getNumRandom(0, 20));
-    player2.changeHP(getNumRandom(0, 20));
+// $fightBtn.addEventListener('click', function () {
 
-    player1.renderHP(player1.hp);
-    player2.renderHP(player2.hp);
+//     player1.changeHp(getNumRandom(0, 20));
+//     player1.renderHp(player1.hp);
+//     player2.changeHp(getNumRandom(0, 20));
+//     player2.renderHp(player2.hp);
+
+//     checkResult(player1, player2);
+// });
+
+$formFight.addEventListener('submit', function (e) {
+    e.preventDefault();
+
+    const enemy = enemyAttack();
+    
+    const attack = {};
+    
+    for (const item of this) {
+        if (item.checked && item.name === 'hit') {
+            attack.value = getNumRandom(0, HIT[item.value]);
+            attack.hit = item.value;
+        }
+        if (item.checked && item.name === 'defence') {
+            attack.defence = item.value;
+        }
+        item.checked = false;
+    }
+    
+    console.log(`attack`, attack);
+    console.log(`enemy `, enemy);
+    console.log(``);
+
+
+    // $fightBtn.addEventListener('click', function () {
+
+    if (attack.defence !== enemy.hit) {
+        // player1.changeHp(getNumRandom(20, 20));
+        player1.changeHp(getNumRandom(0, enemy.value));
+        // player1.changeHp(getNumRandom(0, enemy.value));
+        player1.renderHp(player1.hp);
+    }
+
+    if (enemy.defence !== attack.hit) {
+        // player2.changeHp(getNumRandom(0, 20));
+        player2.changeHp(getNumRandom(0, attack.value));
+        // player2.changeHp(getNumRandom(0, attack.value));
+        player2.renderHp(player2.hp);
+    }
 
     checkResult(player1, player2);
+    // });
+
+    // $fightBtn.addEventListener('click', function () {
+    //     player1.changeHp(getNumRandom(0, 20));
+    //     player1.renderHp(player1.hp);
+    //     player2.changeHp(getNumRandom(0, 20));
+    //     player2.renderHp(player2.hp);
+    //     checkResult(player1, player2);
+    // });
 });
 
 $arenas.appendChild(createPlayer(player1));
