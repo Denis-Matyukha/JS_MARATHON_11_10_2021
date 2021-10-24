@@ -67,6 +67,7 @@ const ATTACK = ['head', 'body', 'foot'];
 const $arenas = document.body.querySelector('.arenas');
 const $fightBtn = document.body.querySelector('.button');
 const $formFight = document.body.querySelector('.control');
+const $chat = document.body.querySelector('.chat');
 
 
 const getRandomFromArray = function (arr) {
@@ -118,18 +119,21 @@ const checkResult = function (player, opponent) {
         stopFightOfferReload();
         opponent.renderHp(0);
         player.renderHp(0);
-
+        generateLogs('draw');
+        
     } else if (player.hp <= 0) {
-
+        
         $arenas.appendChild(showTitle(`${opponent.name} wins`));
         stopFightOfferReload();
         player.renderHp(0);
-
+        generateLogs('end', opponent , player);
+        
     } else if (opponent.hp <= 0) {
-
+        
         $arenas.appendChild(showTitle(`${player.name} wins`));
         stopFightOfferReload();
         opponent.renderHp(0);
+        generateLogs('end', player , opponent);
     }
 };
 
@@ -137,17 +141,20 @@ const elHp = function () {
     return document.querySelector(`.player${this.player} .life`);
 };
 
-const renderHp = function (hp) {
-    elHp.call(this).style.width = +hp + '%';
+const renderHp = function () {
+    elHp.call(this).style.width = +this.hp + '%';
 };
 
-const changeHp = function (hp) {
+const changeHp = function (hpCorrection) {
+
+    this.lastEnjury = hpCorrection;
+
+    this.hp -= hpCorrection;
 
     if (this.hp <= 0) {
         this.hp = 0;
-    } else {
-        this.hp -= hp;
     }
+
 };
 
 const attack = function () {
@@ -160,6 +167,7 @@ const player1 = {
     hp: 100,
     img: 'http://reactmarathon-api.herokuapp.com/assets/scorpion.gif',
     weapon: ['keyboard'],
+    lastEnjury: 0,
     changeHp,
     renderHp,
     attack,
@@ -172,6 +180,7 @@ const player2 = {
     hp: 100,
     img: 'http://reactmarathon-api.herokuapp.com/assets/subzero.gif',
     weapon: ['keyboard'],
+    lastEnjury: 0,
     changeHp,
     renderHp,
     attack,
@@ -232,42 +241,62 @@ const playerAttack = function () {
     return attack;
 }
 
+const generateLogs = function (type, player1={}, player2={}) {
+
+    let text = '';
+    const date = new Date();
+    const hours = date.getHours().toString().length === 1 ? `0${date.getHours()}` : date.getHours();
+    const minutes = date.getMinutes().toString().length === 1 ? `0${date.getMinutes()}` : date.getMinutes();
+    const currentTime = `${hours}:${minutes}`;
+    
+    switch (type) {
+        case 'start':
+            text = logs[type]
+                .replace('[time]', currentTime)
+                .replace('[player1]', player1.name)
+                .replace('[player2]', player2.name);
+            break;
+
+        case 'end':
+            text = logs[type]
+               [getNumRandom(0, logs[type].length - 1)]
+               .replace('[playerWins]', player1.name)
+               .replace('[playerLose]', player2.name);
+            break;
+
+        case 'draw':
+            text = logs[type];
+            break;
+
+        default:
+            // 'defence' and 'hit' ↓
+            text = `${currentTime} ${logs[type]
+                [getNumRandom(0, logs[type].length - 1)]
+                .replace('[playerKick]', player1.name)
+                .replace('[playerDefence]', player2.name)} -${player2.lastEnjury} [${player2.hp}/100]`;
+            break;
+    }
+
+    const el = `<p>${text}</p>`;
+    $chat.insertAdjacentHTML('afterbegin', el);
+}
+
 $formFight.addEventListener('submit', function (e) {
     e.preventDefault();
 
     const enemy = enemyAttack();
-
     const player = playerAttack();
-
-    // for (const item of this) {
-    //     if (item.checked && item.name === 'hit') {
-    //         attack.value = getNumRandom(0, HIT[item.value]);
-    //         attack.hit = item.value;
-    //     }
-    //     if (item.checked && item.name === 'defence') {
-    //         attack.defence = item.value;
-    //     }
-    //     item.checked = false;
-    // }
-
-    // if (attack.defence !== enemy.hit) {
-    //     player1.changeHp(getNumRandom(0, enemy.value));
-    //     player1.renderHp(player1.hp);
-    // }
-
-    // if (enemy.defence !== attack.hit) {
-    //     player2.changeHp(getNumRandom(0, attack.value));
-    //     player2.renderHp(player2.hp);
-    // }
 
     if (player.defence !== enemy.hit) {
         player1.changeHp(getNumRandom(0, enemy.value));
-        player1.renderHp(player1.hp);
+        player1.renderHp();
+        generateLogs('hit', player2, player1);
     }
 
     if (enemy.defence !== player.hit) {
         player2.changeHp(getNumRandom(0, player.value));
-        player2.renderHp(player2.hp);
+        player2.renderHp();
+        generateLogs('hit', player1, player2);
     }
 
     checkResult(player1, player2);
@@ -275,3 +304,5 @@ $formFight.addEventListener('submit', function (e) {
 
 $arenas.appendChild(createPlayer(player1));
 $arenas.appendChild(createPlayer(player2));
+
+generateLogs('start', player1, player2);
