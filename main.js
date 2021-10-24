@@ -214,14 +214,11 @@ const enemyAttack = function () {
     }
 };
 
-$formFight.addEventListener('submit', function (e) {
-    e.preventDefault();
+const playerAttack = function () {
 
-    const enemy = enemyAttack();
-    
     const attack = {};
-    
-    for (const item of this) {
+
+    for (const item of $formFight) {
         if (item.checked && item.name === 'hit') {
             attack.value = getNumRandom(0, HIT[item.value]);
             attack.hit = item.value;
@@ -232,13 +229,44 @@ $formFight.addEventListener('submit', function (e) {
         item.checked = false;
     }
 
-    if (attack.defence !== enemy.hit) {
+    return attack;
+}
+
+$formFight.addEventListener('submit', function (e) {
+    e.preventDefault();
+
+    const enemy = enemyAttack();
+
+    const player = playerAttack();
+
+    // for (const item of this) {
+    //     if (item.checked && item.name === 'hit') {
+    //         attack.value = getNumRandom(0, HIT[item.value]);
+    //         attack.hit = item.value;
+    //     }
+    //     if (item.checked && item.name === 'defence') {
+    //         attack.defence = item.value;
+    //     }
+    //     item.checked = false;
+    // }
+
+    // if (attack.defence !== enemy.hit) {
+    //     player1.changeHp(getNumRandom(0, enemy.value));
+    //     player1.renderHp(player1.hp);
+    // }
+
+    // if (enemy.defence !== attack.hit) {
+    //     player2.changeHp(getNumRandom(0, attack.value));
+    //     player2.renderHp(player2.hp);
+    // }
+
+    if (player.defence !== enemy.hit) {
         player1.changeHp(getNumRandom(0, enemy.value));
         player1.renderHp(player1.hp);
     }
 
-    if (enemy.defence !== attack.hit) {
-        player2.changeHp(getNumRandom(0, attack.value));
+    if (enemy.defence !== player.hit) {
+        player2.changeHp(getNumRandom(0, player.value));
         player2.renderHp(player2.hp);
     }
 
