@@ -1,11 +1,11 @@
+import { $arenas, $formFight } from './gameConsts.js';
 import { player1, player2, createPlayer } from './genPlayers.js';
 import { enemyAttack, playerAttack } from './makeAttack.js';
-import { $arenas, $formFight } from './gameConsts.js';
 import { getNumRandom } from './randomiser.js';
 import { checkResult } from './gameFinal.js';
 import generateLogs from "./genLogs.js";
 
-$formFight.addEventListener('submit', function (e) {
+$formFight.addEventListener('submit', (e) => {
     e.preventDefault();
 
     const { e_value, e_hit, e_defence } = enemyAttack();
