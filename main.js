@@ -56,6 +56,9 @@ const logs = {
     draw: 'Ничья - это тоже победа!'
 };
 
+const { start: logStart, end: logEnd, draw: logDraw} = logs;
+// logs.
+
 const HIT = {
     head: 30,
     body: 25,
@@ -213,36 +216,93 @@ const createPlayer = function (playerObj) {
 };
 
 const enemyAttack = function () {
-    const hit = ATTACK[getNumRandom(0, 2)];
-    const defence = ATTACK[getNumRandom(0, 2)];
+    const e_hit = ATTACK[getNumRandom(0, 2)];
+    const e_defence = ATTACK[getNumRandom(0, 2)];
 
     return {
-        value: getNumRandom(0, HIT[hit]),
-        hit,
-        defence,
+        e_value: getNumRandom(0, HIT[e_hit]),
+        e_hit,
+        e_defence,
     }
 };
 
+// const playerAttack = function () {
+
+//     const attack = {};
+
+//     for (const item of $formFight) {
+//         if (item.checked && item.name === 'hit') {
+//             attack.value = getNumRandom(0, HIT[item.value]);
+//             attack.hit = item.value;
+//         }
+//         if (item.checked && item.name === 'defence') {
+//             attack.defence = item.value;
+//         }
+//         item.checked = false;
+//     }
+
+//     return attack;
+// }
+
 const playerAttack = function () {
 
-    const attack = {};
+    // const attack = {};
+    // item.
 
-    for (const item of $formFight) {
-        if (item.checked && item.name === 'hit') {
-            attack.value = getNumRandom(0, HIT[item.value]);
-            attack.hit = item.value;
+    let p_value, p_hit, p_defence;
+
+    for (let item of $formFight) {
+        let {name: iName, value: iValue} = item;
+
+        if (item.checked && iName === 'hit') {
+            p_value = getNumRandom(0, HIT[iValue]);
+            p_hit = iValue;
         }
-        if (item.checked && item.name === 'defence') {
-            attack.defence = item.value;
+        if (item.checked && iName === 'defence') {
+            p_defence = iValue;
         }
         item.checked = false;
     }
 
-    return attack;
+    console.log(`playerAttack function is WORKING!!!`);
+
+    return {
+        p_value,
+        p_hit,
+        p_defence
+    };
 }
+// 
+// 
+// 
+// const playerAttack = function () {
 
-const generateLogs = function (type, player1={}, player2={}) {
+//     // const attack = {};
 
+//     for (const item of $formFight) {
+//         if (item.checked && item.name === 'hit') {
+//             value = getNumRandom(0, HIT[item.value]);
+//             hit = item.value;
+//         }
+//         if (item.checked && item.name === 'defence') {
+//             defence = item.value;
+//         }
+//         item.checked = false;
+//     }
+
+//     return {
+//         value,
+//         hit,
+//         defence
+//     };
+// }
+// 
+// 
+// 
+
+// const generateLogs = function (type, player1={}, player2={}) {
+const generateLogs = function (type, {name: pl1Name} = {}, player2 = {}) {
+    const {name: pl2Name} = player2;
     let text = '';
     const date = new Date();
     const hours = date.getHours().toString().length === 1 ? `0${date.getHours()}` : date.getHours();
@@ -251,29 +311,36 @@ const generateLogs = function (type, player1={}, player2={}) {
     
     switch (type) {
         case 'start':
-            text = logs[type]
+            // text = logs[type]
+            // text = logStart
+            //     .replace('[time]', currentTime)
+            //     .replace('[player1]', player1.name)
+            //     .replace('[player2]', player2.name);
+            text = logStart
                 .replace('[time]', currentTime)
-                .replace('[player1]', player1.name)
-                .replace('[player2]', player2.name);
+                .replace('[player1]', pl1Name)
+                .replace('[player2]', pl2Name);
             break;
 
         case 'end':
-            text = logs[type]
-               [getNumRandom(0, logs[type].length - 1)]
-               .replace('[playerWins]', player1.name)
-               .replace('[playerLose]', player2.name);
+            // text = logs[type]
+            text = logEnd
+               [getNumRandom(0, logEnd.length - 1)]
+               .replace('[playerWins]', pl1Name)
+               .replace('[playerLose]', pl2Name);
             break;
 
         case 'draw':
-            text = logs[type];
+            // text = logs[type];
+            text = logDraw;
             break;
 
         default:
             // 'defence' and 'hit' ↓
             text = `${currentTime} ${logs[type]
                 [getNumRandom(0, logs[type].length - 1)]
-                .replace('[playerKick]', player1.name)
-                .replace('[playerDefence]', player2.name)} -${player2.lastEnjury} [${player2.hp}/100]`;
+                .replace('[playerKick]', pl1Name)
+                .replace('[playerDefence]', pl2Name)} -${player2.lastEnjury} [${player2.hp}/100]`;
             break;
     }
 
@@ -281,20 +348,50 @@ const generateLogs = function (type, player1={}, player2={}) {
     $chat.insertAdjacentHTML('afterbegin', el);
 }
 
+// $formFight.addEventListener('submit', function (e) {
+//     e.preventDefault();
+
+//     const enemy = enemyAttack();
+//     const player = playerAttack();
+
+//     const { value, hit, defence} = player;
+//     console.log(value,hit,defence);
+
+//     if (player.defence !== enemy.hit) {
+//         player1.changeHp(getNumRandom(0, enemy.value));
+//         player1.renderHp();
+//         generateLogs('hit', player2, player1);
+//     }
+
+//     if (enemy.defence !== player.hit) {
+//         player2.changeHp(getNumRandom(0, player.value));
+//         player2.renderHp();
+//         generateLogs('hit', player1, player2);
+//     }
+
+//     checkResult(player1, player2);
+// });
 $formFight.addEventListener('submit', function (e) {
     e.preventDefault();
 
-    const enemy = enemyAttack();
-    const player = playerAttack();
+    // const enemy = enemyAttack();
+    // const enemy. = enemyAttack();
+    const {p_value, p_hit, p_defence} = playerAttack();
+    // const {value: enValue, hit: enHit, defence: enDefence} = enemyAttack();
+    const {e_value, e_hit, e_defence} = enemyAttack();
 
-    if (player.defence !== enemy.hit) {
-        player1.changeHp(getNumRandom(0, enemy.value));
+    // const { value, hit, defence} = player;
+    // const { value, hit, defence} = player.;
+    // console.log(value,hit,defence);
+
+    if (p_defence !== e_hit) {
+        player1.changeHp(getNumRandom(0, e_value));
         player1.renderHp();
         generateLogs('hit', player2, player1);
     }
 
-    if (enemy.defence !== player.hit) {
-        player2.changeHp(getNumRandom(0, player.value));
+    if (e_defence !== p_hit) {
+        player2.changeHp(getNumRandom(0, p_value));
         player2.renderHp();
         generateLogs('hit', player1, player2);
     }
