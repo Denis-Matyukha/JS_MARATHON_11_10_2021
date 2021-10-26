@@ -1,3 +1,5 @@
+// module1 gameConsts ↓
+//
 const ImagesMK = [
     'https://i.gifer.com/origin/22/222fbac69db750f98d612eba284b300d_w200.webp',
     'https://i.gifer.com/origin/9d/9d01c69ffe1ac6ace3470bf4b61f96d0_w200.webp',
@@ -57,7 +59,6 @@ const logs = {
 };
 
 const { start: logStart, end: logEnd, draw: logDraw} = logs;
-// logs.
 
 const HIT = {
     head: 30,
@@ -71,8 +72,11 @@ const $arenas = document.body.querySelector('.arenas');
 const $fightBtn = document.body.querySelector('.button');
 const $formFight = document.body.querySelector('.control');
 const $chat = document.body.querySelector('.chat');
+//
+// module1 gameConsts ↑
 
-
+// module2 randomiser ↓
+//
 const getRandomFromArray = function (arr) {
     return arr[Math.abs(Math.floor(arr.length - Math.random() * arr.length))];
 };
@@ -80,7 +84,13 @@ const getRandomFromArray = function (arr) {
 const getNumRandom = function (min, max) {
     return Math.round(min + Math.random() * (max - min))
 };
+//
+// module2 randomiser ↑
 
+
+
+// module3 gameFinal ↓
+//
 const createElem = function (tag, className) {
     const $tag = document.createElement(tag);
     if (className) {
@@ -139,7 +149,11 @@ const checkResult = function (player, opponent) {
         generateLogs('end', player , opponent);
     }
 };
+//
+// module3 gameFinal ↑
 
+// module4 hpHandlers ↓
+//
 const elHp = function () {
     return document.querySelector(`.player${this.player} .life`);
 };
@@ -163,7 +177,12 @@ const changeHp = function (hpCorrection) {
 const attack = function () {
     console.log(`${this.name} Fight...`);
 };
+//
+// module4 hpHandlers ↑
 
+
+// module5 genPlayer ↓
+//
 const player1 = {
     player: 1,
     name: 'Scorpion',
@@ -214,7 +233,11 @@ const createPlayer = function (playerObj) {
 
     return $player;
 };
+//
+// module5 genPlayer ↑
 
+// module6 makeAttack ↓
+// 
 const enemyAttack = function () {
     const e_hit = ATTACK[getNumRandom(0, 2)];
     const e_defence = ATTACK[getNumRandom(0, 2)];
@@ -226,28 +249,7 @@ const enemyAttack = function () {
     }
 };
 
-// const playerAttack = function () {
-
-//     const attack = {};
-
-//     for (const item of $formFight) {
-//         if (item.checked && item.name === 'hit') {
-//             attack.value = getNumRandom(0, HIT[item.value]);
-//             attack.hit = item.value;
-//         }
-//         if (item.checked && item.name === 'defence') {
-//             attack.defence = item.value;
-//         }
-//         item.checked = false;
-//     }
-
-//     return attack;
-// }
-
 const playerAttack = function () {
-
-    // const attack = {};
-    // item.
 
     let p_value, p_hit, p_defence;
 
@@ -271,36 +273,13 @@ const playerAttack = function () {
         p_hit,
         p_defence
     };
-}
-// 
-// 
-// 
-// const playerAttack = function () {
+};
+//
+// module6 makeAttack ↑
 
-//     // const attack = {};
 
-//     for (const item of $formFight) {
-//         if (item.checked && item.name === 'hit') {
-//             value = getNumRandom(0, HIT[item.value]);
-//             hit = item.value;
-//         }
-//         if (item.checked && item.name === 'defence') {
-//             defence = item.value;
-//         }
-//         item.checked = false;
-//     }
-
-//     return {
-//         value,
-//         hit,
-//         defence
-//     };
-// }
+// module7 genLogs ↓
 // 
-// 
-// 
-
-// const generateLogs = function (type, player1={}, player2={}) {
 const generateLogs = function (type, {name: pl1Name} = {}, player2 = {}) {
     const {name: pl2Name} = player2;
     let text = '';
@@ -311,11 +290,6 @@ const generateLogs = function (type, {name: pl1Name} = {}, player2 = {}) {
     
     switch (type) {
         case 'start':
-            // text = logs[type]
-            // text = logStart
-            //     .replace('[time]', currentTime)
-            //     .replace('[player1]', player1.name)
-            //     .replace('[player2]', player2.name);
             text = logStart
                 .replace('[time]', currentTime)
                 .replace('[player1]', pl1Name)
@@ -323,7 +297,6 @@ const generateLogs = function (type, {name: pl1Name} = {}, player2 = {}) {
             break;
 
         case 'end':
-            // text = logs[type]
             text = logEnd
                [getNumRandom(0, logEnd.length - 1)]
                .replace('[playerWins]', pl1Name)
@@ -331,7 +304,6 @@ const generateLogs = function (type, {name: pl1Name} = {}, player2 = {}) {
             break;
 
         case 'draw':
-            // text = logs[type];
             text = logDraw;
             break;
 
@@ -346,43 +318,15 @@ const generateLogs = function (type, {name: pl1Name} = {}, player2 = {}) {
 
     const el = `<p>${text}</p>`;
     $chat.insertAdjacentHTML('afterbegin', el);
-}
+};
+// 
+// module7 genLogs ↑
 
-// $formFight.addEventListener('submit', function (e) {
-//     e.preventDefault();
-
-//     const enemy = enemyAttack();
-//     const player = playerAttack();
-
-//     const { value, hit, defence} = player;
-//     console.log(value,hit,defence);
-
-//     if (player.defence !== enemy.hit) {
-//         player1.changeHp(getNumRandom(0, enemy.value));
-//         player1.renderHp();
-//         generateLogs('hit', player2, player1);
-//     }
-
-//     if (enemy.defence !== player.hit) {
-//         player2.changeHp(getNumRandom(0, player.value));
-//         player2.renderHp();
-//         generateLogs('hit', player1, player2);
-//     }
-
-//     checkResult(player1, player2);
-// });
 $formFight.addEventListener('submit', function (e) {
     e.preventDefault();
 
-    // const enemy = enemyAttack();
-    // const enemy. = enemyAttack();
     const {p_value, p_hit, p_defence} = playerAttack();
-    // const {value: enValue, hit: enHit, defence: enDefence} = enemyAttack();
     const {e_value, e_hit, e_defence} = enemyAttack();
-
-    // const { value, hit, defence} = player;
-    // const { value, hit, defence} = player.;
-    // console.log(value,hit,defence);
 
     if (p_defence !== e_hit) {
         player1.changeHp(getNumRandom(0, e_value));
