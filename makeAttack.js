@@ -26,7 +26,7 @@ export const playerAttack = () => {
         if (item.checked && iName === 'defence') {
             p_defence = iValue;
         }
-        // item.checked = false;
+        item.checked = false;
     }
 
     return {

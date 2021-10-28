@@ -78,10 +78,6 @@ export const player1 = new Player({
     img: 'http://reactmarathon-api.herokuapp.com/assets/scorpion.gif',
     weapon: ['keyboard'],
 });
-console.log(`PLAYER_1 ↓ `);
-console.dir(player1);
-console.dir(player1.attack());
-console.log(player1.elHp());
 
 export const player2 = new Player({
     player: 2,
@@ -90,7 +86,3 @@ export const player2 = new Player({
     img: 'http://reactmarathon-api.herokuapp.com/assets/subzero.gif',
     weapon: ['externalHdd1TB'],
 });
-console.log(`PLAYER_2 ↓ `);
-console.dir(player2);
-console.dir(player2.attack());
-console.log(player2.elHp());
