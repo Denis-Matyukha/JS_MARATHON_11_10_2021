@@ -31,9 +31,9 @@ export default class Player {
         this.img = props.img;
         this.hp = props.hp;
         this.lastEnjury = 0;
-        this.elHp = () => document.querySelector(`.player${this.player} .life`);
     };
-
+    
+    elHp = () => document.querySelector(`.player${this.player} .life`);
     renderHp = () => this.elHp.call(this).style.width = +this.hp + '%';
     attack = () => console.log(`${this.name} Fight...`);
     changeHp = (hpCorrection) => {
