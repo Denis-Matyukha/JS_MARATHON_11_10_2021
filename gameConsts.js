@@ -1,3 +1,5 @@
+import Player from './genPlayers.js';
+
 export const ImagesMK = [
     'https://i.gifer.com/origin/22/222fbac69db750f98d612eba284b300d_w200.webp',
     'https://i.gifer.com/origin/9d/9d01c69ffe1ac6ace3470bf4b61f96d0_w200.webp',
@@ -68,3 +70,27 @@ export const $arenas = document.body.querySelector('.arenas');
 export const $fightBtn = document.body.querySelector('.button');
 export const $formFight = document.body.querySelector('.control');
 export const $chat = document.body.querySelector('.chat');
+
+export const player1 = new Player({
+    player: 1,
+    name: 'Scorpion',
+    hp: 100,
+    img: 'http://reactmarathon-api.herokuapp.com/assets/scorpion.gif',
+    weapon: ['keyboard'],
+});
+console.log(`PLAYER_1 ↓ `);
+console.dir(player1);
+console.dir(player1.attack());
+console.log(player1.elHp());
+
+export const player2 = new Player({
+    player: 2,
+    name: 'Subzero',
+    hp: 100,
+    img: 'http://reactmarathon-api.herokuapp.com/assets/subzero.gif',
+    weapon: ['externalHdd1TB'],
+});
+console.log(`PLAYER_2 ↓ `);
+console.dir(player2);
+console.dir(player2.attack());
+console.log(player2.elHp());

@@ -1,5 +1,6 @@
-import { getNumRandom } from './randomiser.js';
 import { logs, $chat } from './gameConsts.js';
+import { getNumRandom } from './randomiser.js';
+
 const { start: logStart, end: logEnd, draw: logDraw } = logs;
 
 const generateLogs = (type, { name: pl1Name } = {}, player2 = {}) => {
